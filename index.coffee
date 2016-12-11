@@ -4,8 +4,8 @@ gpg = require 'gpg'
 fs = require 'fs'
         
 class usableGPG 
-  constructor: (@fullName, @email, @passphrase, @keyName) ->
-    @defArgs = ["--no-default-keyring", "--secret-keyring", "keys/#{@keyName}.sec", "--keyring", "keys/#{@keyName}.pub", 
+  constructor: (@fullName, @email, @passphrase, @keyLocation) ->
+    @defArgs = ["--no-default-keyring", "--secret-keyring", "#{@keyLocation}.sec", "--keyring", "#{@keyLocation}.pub", 
     "--no-batch", "--passphrase-fd", "0", "--command-fd", "0"]
 
   callGPG = (input, args) ->
@@ -18,7 +18,7 @@ class usableGPG
     
   createKey: (keyType, keyLength, subkeyType, subkeyLength, expireDate) -> 
     key = \
-      "Key-Type: #{keyType}\nKey-Length: #{keyLength}\nSubkey-Type: #{subkeyType}\nSubkey-Length: #{subkeyLength}\nName-Real: #{@fullName}\nName-Comment: nope\nName-Email: #{@email}\nExpire-Date: #{expireDate}\nPassphrase: #{@passphrase}\n%secring keys/#{@keyName}.sec\n%pubring keys/#{@keyName}.pub\n%commit\n"
+      "Key-Type: #{keyType}\nKey-Length: #{keyLength}\nSubkey-Type: #{subkeyType}\nSubkey-Length: #{subkeyLength}\nName-Real: #{@fullName}\nName-Comment: nope\nName-Email: #{@email}\nExpire-Date: #{expireDate}\nPassphrase: #{@passphrase}\n%secring #{@keyLocation}.sec\n%pubring #{@keyLocation}.pub\n%commit\n"
     callGPG(key, ['-v', '--batch', '--gen-key'])
 
   strengthenHash: (hashType) ->
