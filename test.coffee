@@ -1,6 +1,6 @@
 usableGPG = require './index'
 
-gpg = new usableGPG('mzdunek', 'mzdunek@example.com', 'abc', 'key')
+gpg = new usableGPG(fullName: 'mzdunek', email: 'mzdunek@example.com', passphrase: 'abc')
 
 gpg.createKey('RSA', 4096, 'ELG-E', 4096, 0)
 .then () ->
